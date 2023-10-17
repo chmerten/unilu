@@ -6,7 +6,6 @@ $hidden = $settings->hidden;
 
 $settings = new admin_category('enroluniluroot', get_string('pluginname', 'enrol_unilu'), $hidden);
 
-*/
 if ($ADMIN->fulltree) {
 
     $settings->add(new admin_setting_heading('enrol_unilu_settings', '', get_string('pluginname_descr', 'enrol_unilu')));
