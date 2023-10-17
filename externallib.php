@@ -62,7 +62,7 @@ class enrol_unilu_external extends external_api
         $course_basic_fields = array(
             'fullname' => $fullname,
             'shortname' => $shortname,
-            'idnumber' => trim($idnumber),
+            'idnumber' => $idnumber,
             'category' => $category->id
         );
 
@@ -114,12 +114,13 @@ class enrol_unilu_external extends external_api
                 'matricule' => new external_value(PARAM_TEXT, 'Matricule'),
                 'faculte'   => new external_value(PARAM_TEXT, 'Faculté'),
                 'promotion' => new external_value(PARAM_TEXT, 'Promotion'),
+                'statut'    => new external_value(PARAM_TEXT, 'Statut à l Université'),
                 'suspended' => new external_value(PARAM_INT, 'Suspended [no: 0, yes: 1]'),
             )
         );
     }
 
-    public static function sync_user(String $firstname, String $lastname, String $username, String $email, String $phone, String $aa, String $matricule, String $faculte, String $promotion, int $suspended)
+    public static function sync_user(String $firstname, String $lastname, String $username, String $email, String $phone, String $aa, String $matricule, String $faculte, String $promotion, String $statut, int $suspended)
     {
         global $CFG, $DB;
         require_once($CFG->dirroot . '/user/lib.php');
@@ -137,7 +138,8 @@ class enrol_unilu_external extends external_api
             'aa' => $aa,
             'matricule' => $matricule,
             'faculte' => $faculte,
-            'promotion' => $promotion
+            'promotion' => $promotion,
+            'statut' => $statut
         );
 
         // Validate parameters
