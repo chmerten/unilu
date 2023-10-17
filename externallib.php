@@ -232,9 +232,15 @@ class enrol_unilu_external extends external_api
             foreach ($user_basic_profile_fields as $fieldid => $fieldname) {
                 $user->$fieldid = $user_basic_profile_data->$fieldid;
             }
-
             // create the user
             $user->id = user_create_user($user);
+
+            // fill additional custom fields
+            foreach ($user_custom_profile_fields as $fieldid => $fieldname) {
+                $profilefieldid = 'profile_field_' . $fieldid;
+                $user->{$profilefieldid} = $user_custom_profile_data->{$fieldid};
+            }
+            profile_save_data($user);
         }
         return 'Success';
     }
