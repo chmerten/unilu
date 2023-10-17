@@ -8,7 +8,7 @@ $settings = new admin_category('enroluniluroot', get_string('pluginname', 'enrol
 
 if ($ADMIN->fulltree) {
 
-    $settings->add(new admin_setting_heading('enrol_unilu_settings', '', get_string('pluginname_descr', 'enrol_unilu')));
+    $settings->add(new admin_setting_heading('enrol_unilu_settings', '', get_string('pluginname_descr', 'enrol_unilu'),''));
 
     //--- course settings -----------------------------------------------------------------------------------
     $settings->add(new admin_setting_heading('enrol_unilu_coursesettings', get_string('course_settings', 'enrol_unilu'), ''));
