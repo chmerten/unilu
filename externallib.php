@@ -115,7 +115,7 @@ class enrol_unilu_external extends external_api
                 'faculte'   => new external_value(PARAM_TEXT, 'Faculté'),
                 'promotion' => new external_value(PARAM_TEXT, 'Promotion'),
                 'statut'    => new external_value(PARAM_TEXT, 'Statut à l Université'),
-                'suspended' => new external_value(PARAM_INT, 'Suspended [no: 0, yes: 1]'),
+                'suspended' => new external_value(PARAM_INT, 'Suspended [no: 0, yes: 1]')
             )
         );
     }
@@ -131,7 +131,7 @@ class enrol_unilu_external extends external_api
             'lastname' => $lastname,
             'username' => $username,
             'email' => $email,
-            'phone1' => $phone
+            'phone1' => $phone,
             'suspended' => $suspended
         );
         $user_custom_profile_fields= array(
