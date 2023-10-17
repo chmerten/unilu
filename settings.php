@@ -11,8 +11,12 @@ if ($ADMIN->fulltree) {
     foreach ($plugins as $plugin) {
         $options[$plugin] = get_string('pluginname', 'auth_' . $plugin);
     }
-    $settingspage->add(new admin_setting_configselect('enrol_unilu/auth', get_string('authmethod', 'enrol_unilu'),
-        get_string('authmethodhelp', 'enrol_unilu'), 'manual', $options));
+    $settings->add(new admin_setting_configselect(
+        'enrol_unilu/auth',
+        get_string('authmethod', 'enrol_unilu'),
+        get_string('authmethodhelp', 'enrol_unilu')
+        , 'manual',
+        $options));
 
     // Academic year
     $settings->add(new admin_setting_configtext(
