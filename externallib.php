@@ -56,7 +56,7 @@ class enrol_unilu_external extends external_api
         if (!$category) {
             $errorparams = new stdClass();
             $errorparams->categoryidnumber = $categoryidnumber;
-            throw new moodle_exception('nocoursecategory', 'enrol_civisportal', '', $errorparams);
+            throw new moodle_exception('nocoursecategory', 'enrol_unilu', '', $errorparams);
         }
 
         $course_basic_fields = array(
