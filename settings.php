@@ -1,6 +1,12 @@
 <?php
 defined('MOODLE_INTERNAL') || die();
 
+require_once('adminlib.php');
+
+$hidden = $settings->hidden;
+
+$settings = new admin_category('enroluniluroot', get_string('pluginname', 'enrol_unilu'), $hidden);
+
 
 if ($ADMIN->fulltree) {
 
