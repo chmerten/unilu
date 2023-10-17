@@ -1,6 +1,6 @@
 <?php
 
-$string['pluginname'] = 'UNILU';
+$string['pluginname'] = 'unilu';
 $string['pluginname_descr'] = 'Enrolment plugin used for synchronisation';
 
 $string['course_settings'] = 'Course settings';
