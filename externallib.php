@@ -120,7 +120,7 @@ class enrol_unilu_external extends external_api
         );
     }
 
-    public static function sync_user(String $firstname, String $lastname, String $username, String $email, String $phone, String $aa, String $matricule, String $faculte, String $promotion, String $statut, int $suspended)
+    public static function sync_user(String $firstname, String $lastname, String $username, String $email, String $phone1, String $aa, String $matricule, String $faculte, String $promotion, String $statut, int $suspended)
     {
         global $CFG, $DB;
         require_once($CFG->dirroot . '/user/lib.php');
@@ -131,7 +131,7 @@ class enrol_unilu_external extends external_api
             'lastname' => $lastname,
             'username' => $username,
             'email' => $email,
-            'phone1' => $phone,
+            'phone1' => $phone1,
             'suspended' => $suspended
         );
         $user_custom_profile_fields= array(
