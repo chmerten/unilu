@@ -1,6 +1,7 @@
 <?php
 defined('MOODLE_INTERNAL') || die();
 
+/*
 require_once('adminlib.php');
 
 $hidden = $settings->hidden;
@@ -17,3 +18,5 @@ if ($ADMIN->fulltree) {
     $settingspage->add(new admin_setting_configtext('enrol_unilu/academicyear', get_string('academicyear', 'enrol_unilu'),
         get_string('academicyearhelp', 'enrol_unilu'), '', '/^[0-9]{6}$/'));
 }
+
+*/
