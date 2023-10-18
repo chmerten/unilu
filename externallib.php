@@ -48,10 +48,13 @@ class enrol_unilu_external extends external_api
         // almost all external functions.
         $context = context_system::instance();
         self::validate_context($context);
+
+        $transaction = $DB->start_delegated_transaction();
+
         $course = $DB->get_record('course', array('idnumber' => $idnumber));
 
         $categoryidnumber = strtoupper(trim($categoryidnumber));
-        $category = $DB->get_record('course_categories', array('idnumber' => $categoryidnumber));
+        $category = $DB->get_record('course_categories', array('idnumber' => trim(params['categoryidnumber'])));
 
         if (!$category) {
             $errorparams = new stdClass();
@@ -60,9 +63,9 @@ class enrol_unilu_external extends external_api
         }
 
         $course_basic_fields = array(
-            'fullname' => $fullname,
-            'shortname' => $shortname,
-            'idnumber' => $idnumber,
+            'fullname' => trim($params['fullname']),
+            'shortname' => trim($params['shortname']),
+            'idnumber' => trim($params['$idnumber']),
             'category' => $category->id
         );
 
@@ -75,6 +78,7 @@ class enrol_unilu_external extends external_api
                     $course->$fieldid = $fieldvalue;
                 }
             }
+            $transaction->allow_commit();
             return $course->id;
         }
         else{
@@ -92,6 +96,8 @@ class enrol_unilu_external extends external_api
             if (!$courseid) {
                 throw new moodle_exception('createcoursefailed');
             }
+
+            $transaction->allow_commit();
             return $courseid;
         }
     }
@@ -160,6 +166,8 @@ class enrol_unilu_external extends external_api
         $context = context_system::instance();
         self::validate_context($context);
 
+        $transaction = $DB->start_delegated_transaction();
+
         // Open log file.
         //$enrol->open_log_file();
 
@@ -214,6 +222,9 @@ class enrol_unilu_external extends external_api
                 profile_save_data($user);
             }
 
+            // Trigger event.
+            \core\event\user_updated::create_from_userid($user->id)->trigger();
+
         }
         else {
 
@@ -241,8 +252,14 @@ class enrol_unilu_external extends external_api
                 $user->{$profilefieldid} = $user_custom_profile_data->{$fieldid};
             }
             profile_save_data($user);
+
+            // Trigger event.
+            \core\event\user_created::create_from_userid($user->id)->trigger();
         }
-        return 'Success';
+
+        $transaction->allow_commit();
+
+        return $user->id;
     }
 
     public static function sync_user_returns() {
