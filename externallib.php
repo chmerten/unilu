@@ -336,13 +336,13 @@ class enrol_unilu_external extends external_api
             if (!array_key_exists($roleid, $roles)) {
                 $errorparams = new stdClass();
                 $errorparams->courseidnumber = $courseidnumber;
-                $errorparams->useridnumber = $useridnumber;
+                $errorparams->username = $username;
                 $errorparams->role = $role_moodle;
                 throw new moodle_exception('usercannotassign', 'enrol_unilu', '', $errorparams);
             }
 
             // Retrieve ID of the user to enrol.
-            $userid = $enrol->get_user_id($useridnumber);
+            $userid = $enrol->get_user_id($username);
 
             if (!$userid) {
                 return 'No corresponding user ('.$username.') in database';

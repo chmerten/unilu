@@ -18,6 +18,13 @@ $functions = array(
         'classpath'   => 'enrol/unilu/externallib.php',
         'description' => 'Synchronize a user',
         'type'        => 'write'
+    ),
+    'enrol_unilu_sync_enrolment' => array(
+        'classname'   => 'enrol_unilu_external',
+        'methodname'  => 'sync_enrolment',
+        'classpath'   => 'enrol/unilu/externallib.php',
+        'description' => 'Enrolment into course',
+        'type'        => 'write'
     )
 );
 
@@ -25,7 +32,7 @@ $functions = array(
 $services = array(
     'UNILU' => array(
         'shortname' => 'unilu',
-        'functions' => array('enrol_unilu_sync_course', 'enrol_unilu_sync_user'),
+        'functions' => array('enrol_unilu_sync_course', 'enrol_unilu_sync_user', 'enrol_unilu_sync_enrolment'),
         'requiredcapability' => '',
         'restrictedusers' => 1,
         'enabled' => 1
