@@ -226,6 +226,7 @@ class enrol_unilu_external extends external_api
             // Ensure the current user is allowed to run this function.
             require_capability('moodle/user:create', $context);
             $user = new stdClass();
+            $availableauths = core_component::get_plugin_list('auth');
             $user->auth = $enrol->get_config('auth');
             // Make sure auth is valid.
             if (empty($availableauths[$user->auth])) {
