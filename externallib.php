@@ -130,6 +130,8 @@ class enrol_unilu_external extends external_api
         require_once($CFG->dirroot . '/user/lib.php');
         require_once($CFG->dirroot . '/user/profile/lib.php');
 
+        $promotion = str_replace(' ', '-', trim($promotion));
+
         $user_basic_profile_fields = array(
             'firstname' => $firstname,
             'lastname' => $lastname,
