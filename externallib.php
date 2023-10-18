@@ -28,7 +28,7 @@ class enrol_unilu_external extends external_api
         $params_array = array(
             'fullname' => $fullname,
             'shortname' => $shortname,
-            'idnumber' => trim($idnumber),
+            'idnumber' => $idnumber,
             'categoryidnumber' => $categoryidnumber,
         );
 
@@ -49,9 +49,6 @@ class enrol_unilu_external extends external_api
         $context = context_system::instance();
         self::validate_context($context);
 
-
-        $course = $DB->get_record('course', array('idnumber' => $idnumber));
-
         $promotion = str_replace(' ', '-', trim($categoryidnumber));
         $category = $DB->get_record('course_categories', array('idnumber' => $promotion));
 
@@ -61,10 +58,13 @@ class enrol_unilu_external extends external_api
             throw new moodle_exception('nocoursecategory', 'enrol_unilu', '', $errorparams);
         }
 
+        $course_idnumber = trim(params['idnumber']);
+        $course = $DB->get_record('course', array('idnumber' => $course_idnumber));
+
         $course_basic_fields = array(
             'fullname' => trim($params['fullname']),
             'shortname' => trim($params['shortname']),
-            'idnumber' => trim($params['$idnumber']),
+            'idnumber' => $course_idnumber,
             'category' => $category->id
         );
 
