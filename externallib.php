@@ -72,10 +72,15 @@ class enrol_unilu_external extends external_api
             $context = context_course::instance($course->id, MUST_EXIST);
             self::validate_context($context);
             require_capability('moodle/course:update', $context);
+            $course_changed=0;
             foreach ($course_basic_fields as $fieldid => $fieldvalue) {
                 if ($fieldvalue !== $course->$fieldid) {
                     $course->$fieldid = $fieldvalue;
+                    $course_changed=1;
                 }
+            }
+            if ($course_changed){
+                update_course($course);
             }
             return $course->id;
         }
