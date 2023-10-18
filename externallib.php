@@ -49,7 +49,6 @@ class enrol_unilu_external extends external_api
         $context = context_system::instance();
         self::validate_context($context);
 
-        $transaction = $DB->start_delegated_transaction();
 
         $course = $DB->get_record('course', array('idnumber' => $idnumber));
 
@@ -78,7 +77,6 @@ class enrol_unilu_external extends external_api
                     $course->$fieldid = $fieldvalue;
                 }
             }
-            $transaction->allow_commit();
             return $course->id;
         }
         else{
@@ -97,7 +95,7 @@ class enrol_unilu_external extends external_api
                 throw new moodle_exception('createcoursefailed');
             }
 
-            $transaction->allow_commit();
+
             return $courseid;
         }
     }
@@ -166,7 +164,6 @@ class enrol_unilu_external extends external_api
         $context = context_system::instance();
         self::validate_context($context);
 
-        $transaction = $DB->start_delegated_transaction();
 
         // Open log file.
         //$enrol->open_log_file();
@@ -222,12 +219,9 @@ class enrol_unilu_external extends external_api
                 profile_save_data($user);
             }
 
-            // Trigger event.
-            \core\event\user_updated::create_from_userid($user->id)->trigger();
 
         }
         else {
-
             // create user
             // Ensure the current user is allowed to run this function.
             require_capability('moodle/user:create', $context);
@@ -253,11 +247,8 @@ class enrol_unilu_external extends external_api
             }
             profile_save_data($user);
 
-            // Trigger event.
-            \core\event\user_created::create_from_userid($user->id)->trigger();
         }
 
-        $transaction->allow_commit();
 
         return $user->id;
     }
