@@ -9,3 +9,4 @@ $plugin->version   = 2023101808;       // The current module version (Date: YYYY
 $plugin->requires  = 2014051219;       // Requires this Moodle version
 $plugin->component = 'enrol_unilu';       // Full name of the plugin (used for diagnostics)
 $plugin->cron      = 0;
+

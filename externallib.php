@@ -99,8 +99,6 @@ class enrol_unilu_external extends external_api
             if (!$courseid) {
                 throw new moodle_exception('createcoursefailed');
             }
-
-
             return $courseid;
         }
     }
@@ -264,6 +262,111 @@ class enrol_unilu_external extends external_api
     public static function sync_user_returns() {
         return new external_value(PARAM_TEXT, 'Status of the synchronization');
     }
+
+    /////////////// COURSE ENROLMENTS //////////////////////////
+    public static function sync_enrolment_parameters() {
+        return new external_function_parameters(
+            array(
+                'courseidnumber' => new external_value(PARAM_TEXT, 'The ID number of the course in which the user is enrolled.'),
+                'username' => new external_value(PARAM_TEXT, 'ULBID of the enrolled user.'),
+                'role' => new external_value(PARAM_TEXT, 'The role to assign to the user.'),
+            )
+        );
+    }
+
+    public static function sync_enrolment($courseidnumber, $username, $role) {
+        global $CFG, $DB;
+
+        require_once($CFG->libdir . '/enrollib.php');
+
+        // Validate parameters. Return an exception if no validation.
+        $params = self::validate_parameters(self::sync_enrolment_parameters(),
+            array('courseidnumber' => $courseidnumber, 'username' => $username, 'role' => $role));
+
+        // Clean parameters.
+        $courseidnumber = trim($params['courseidnumber']);
+        $username= trim($params['username']);
+        $role = strtoupper($params['role']);
+
+        // Retrieve the enrolment plugin.
+        $enrol = enrol_get_plugin('ulb');
+        if (empty($enrol)) {
+            throw new moodle_exception('pluginnotinstalled', 'enrol_unilu');
+        }
+
+        // Check if the plugin is enabled.
+        if (!enrol_is_enabled($enrol->get_name())) {
+            throw new moodle_exception('plugindisabled', 'enrol_unilu');
+        }
+
+        try {
+
+            // Check role
+            $role_moodle='not_defined';
+            if ($role == 'TITULAIRE') {
+                $role_moodle='editingteacher';
+            } elseif ($role == 'STUDENT') {
+                $role_moodle='student';
+            } else {
+                $errorparams = new stdClass();
+                $errorparams->role = $role;
+                throw new moodle_exception('invalidrole', 'enrol_unilu', '', $errorparams);
+            }
+
+            // Retrieve ID of the role.
+            $roleid = $DB->get_field('role', 'id', array('shortname' => $role_moodle), MUST_EXIST);
+
+            // Retrieve ID of the course.
+            $courseid = $enrol->get_course_id($courseidnumber);
+
+            if (!$courseid) {
+                return 'No corresponding course ('.$courseidnumber.') in database';
+            }
+
+            // This function does sanity and security checks on the context that was passed to the external function. This is required for
+            // almost all external functions.
+            $context = context_course::instance($courseid);
+            self::validate_context($context);
+
+            // Check that the user has the permission to enrol.
+            require_capability('enrol/unilu:enrol', $context);
+
+            // Throw an exception if user is not able to assign the role.
+            $roles = get_assignable_roles($context);
+            if (!array_key_exists($roleid, $roles)) {
+                $errorparams = new stdClass();
+                $errorparams->courseidnumber = $courseidnumber;
+                $errorparams->useridnumber = $useridnumber;
+                $errorparams->role = $role_moodle;
+                throw new moodle_exception('usercannotassign', 'enrol_unilu', '', $errorparams);
+            }
+
+            // Retrieve ID of the user to enrol.
+            $userid = $enrol->get_user_id($useridnumber);
+
+            if (!$userid) {
+                return 'No corresponding user ('.$username.') in database';
+            }
+
+            $transaction = $DB->start_delegated_transaction();
+
+            // Get plugin instance for the given course and enrol user.
+            $instance = $enrol->get_instance($courseid);
+            $enrol->enrol_user($instance, $userid, $roleid);
+
+            $transaction->allow_commit();
+        } catch (Exception $e) {
+            throw $e;
+        }
+
+        return 'Success';
+    }
+
+    public static function sync_enrolment_returns() {
+        return new external_value(PARAM_TEXT, 'Status of the enrolment');
+    }
+
+
 
 }
 
