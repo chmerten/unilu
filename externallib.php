@@ -52,8 +52,8 @@ class enrol_unilu_external extends external_api
 
         $course = $DB->get_record('course', array('idnumber' => $idnumber));
 
-        $categoryidnumber = str_replace(' ', '-', trim($categoryidnumber));
-        $category = $DB->get_record('course_categories', array('idnumber' => trim(params['categoryidnumber'])));
+        $promotion = str_replace(' ', '-', trim($categoryidnumber));
+        $category = $DB->get_record('course_categories', array('idnumber' => $promotion));
 
         if (!$category) {
             $errorparams = new stdClass();
