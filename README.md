@@ -25,3 +25,7 @@ La notion de département n'est pas considérée ici car relève des aspects adm
 Le plugin "unilu" est à installer au sein de [moodle_dir]/enrol/unilu. 
 
 - **Paramétrage pour l'utilisation du webservice**
+
+1. Création du user attaché au web service
+2. Creation d’un rôle «webservice»  ayant des permissions spécifiques >> https://moodle.unilu.ac.cd/admin/roles/define.php?action=view&roleid=9
+3. Attribuer le rôle webservice à l’utilisateur webservice >> https://moodle.unilu.ac.cd/admin/roles/assign.php?contextid=1
