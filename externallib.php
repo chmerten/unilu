@@ -289,7 +289,7 @@ class enrol_unilu_external extends external_api
         $role = strtoupper($params['role']);
 
         // Retrieve the enrolment plugin.
-        $enrol = enrol_get_plugin('ulb');
+        $enrol = enrol_get_plugin('unilu');
         if (empty($enrol)) {
             throw new moodle_exception('pluginnotinstalled', 'enrol_unilu');
         }
